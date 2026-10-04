@@ -1,0 +1,131 @@
+{% extends 'core/base.html' %}
+{% block title %}Payment — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 480px;">
+    <div class="eventora-card p-0 overflow-hidden">
+
+        <!-- Header -->
+        <div class="p-4" style="background: linear-gradient(135deg, var(--eventora-secondary), var(--eventora-primary));">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-white fw-bold fs-5">Eventora Pay</span>
+                <span class="badge bg-light text-dark">Test Mode</span>
+            </div>
+            <p class="text-white-50 small mb-1">{{ booking.listing.title }}</p>
+            <h2 class="fw-bold text-white mb-0">₹{{ booking.total_price }}</h2>
+        </div>
+
+        <div class="p-4">
+            <!-- Payment method tabs -->
+            <ul class="nav nav-pills mb-4 gap-2" id="paymentTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active payment-tab" data-tab="upi" type="button">
+                        <i class="bi bi-phone"></i> UPI
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link payment-tab" data-tab="card" type="button">
+                        <i class="bi bi-credit-card"></i> Card
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link payment-tab" data-tab="netbanking" type="button">
+                        <i class="bi bi-bank"></i> Netbanking
+                    </button>
+                </li>
+            </ul>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- UPI Panel -->
+                <div class="payment-panel" id="panel-upi">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">UPI ID</label>
+                        <input type="text" class="form-control" value="demo@okhdfcbank" readonly>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-4 text-center">
+                            <div class="upi-app-badge">
+                                <i class="bi bi-phone-fill"></i>
+                                <span>GPay</span>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="upi-app-badge">
+                                <i class="bi bi-phone-fill"></i>
+                                <span>PhonePe</span>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="upi-app-badge">
+                                <i class="bi bi-phone-fill"></i>
+                                <span>Paytm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Panel -->
+                <div class="payment-panel d-none" id="panel-card">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Card Number</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="4111 1111 1111 1111" readonly>
+                            <span class="input-group-text bg-white"><i class="bi bi-credit-card-2-front"></i></span>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Expiry</label>
+                            <input type="text" class="form-control" value="12/28" readonly>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">CVV</label>
+                            <input type="text" class="form-control" value="123" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Cardholder Name</label>
+                        <input type="text" class="form-control" value="{{ request.user.get_full_name|default:request.user.username }}" readonly>
+                    </div>
+                </div>
+
+                <!-- Netbanking Panel -->
+                <div class="payment-panel d-none" id="panel-netbanking">
+                    <label class="form-label fw-semibold small mb-2">Select Bank</label>
+<div class="row g-2 mb-3">
+                        <div class="col-6"><div class="bank-option">HDFC Bank</div></div>
+                        <div class="col-6"><div class="bank-option">ICICI Bank</div></div>
+                        <div class="col-6"><div class="bank-option">State Bank of India</div></div>
+                        <div class="col-6"><div class="bank-option">Axis Bank</div></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-eventora-primary w-100 mt-2">Pay ₹{{ booking.total_price }}</button>
+            </form>
+
+            <p class="text-muted small text-center mt-3 mb-0">
+                <i class="bi bi-shield-check"></i> This is a simulated payment for demo purposes. No real transaction occurs.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.payment-tab');
+        const panels = document.querySelectorAll('.payment-panel');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                tabs.forEach(t => t.classList.remove('active'));
+                panels.forEach(p => p.classList.add('d-none'));
+
+                this.classList.add('active');
+                document.getElementById('panel-' + this.dataset.tab).classList.remove('d-none');
+            });
+        });
+    });
+</script>
+{% endblock %}

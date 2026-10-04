@@ -1,0 +1,22 @@
+# Virtual environment
+venv/
+
+# Python / pip / pytest
+__pycache__/
+*.pyc
+.pip-temp/
+.pytest_cache/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.log
+
+# Secrets
+.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

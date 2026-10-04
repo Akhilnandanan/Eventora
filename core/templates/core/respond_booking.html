@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+{% block title %}Respond to Booking — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-1">
+            {% if action == 'accept' %}Confirm Acceptance{% else %}Confirm Rejection{% endif %}
+        </h2>
+        <p class="text-muted mb-4">
+            Booking from <strong>{{ booking.customer.username }}</strong> for
+            <strong>{{ booking.listing.title }}</strong> on {{ booking.event_date }}
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ field.label }} (optional)</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            {% if action == 'accept' %}
+                <button type="submit" class="btn btn-success w-100">Confirm Accept</button>
+            {% else %}
+                <button type="submit" class="btn btn-danger w-100">Confirm Reject</button>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

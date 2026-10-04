@@ -1,0 +1,677 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- =====================================================
+     HERO CAROUSEL
+     ===================================================== -->
+
+<section
+    class="hero-carousel"
+    id="heroCarousel"
+>
+
+
+    <!-- ================= SLIDE 1 ================= -->
+
+    <div
+        class="carousel-slide active"
+        data-slide="0"
+        style="background-image: url('{% static 'core/images/slide-photography.jpg' %}');"
+    >
+
+        <div class="carousel-overlay"></div>
+
+        <div class="container text-center text-white">
+
+            <h1 class="display-4 fw-bold">
+                Capture Every Moment
+            </h1>
+
+            <p class="lead">
+                Professional photographers ready to tell your story.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SLIDE 2 ================= -->
+
+    <div
+        class="carousel-slide"
+        data-slide="1"
+        style="background-image: url('{% static 'core/images/slide-party.jpg' %}');"
+    >
+
+        <div class="carousel-overlay"></div>
+
+        <div class="container text-center text-white">
+
+            <h1 class="display-4 fw-bold">
+                Beautifully Decorated
+            </h1>
+
+            <p class="lead">
+                Turn any venue into something unforgettable.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SLIDE 3 ================= -->
+
+    <div
+        class="carousel-slide"
+        data-slide="2"
+        style="background-image: url('{% static 'core/images/slide-dj.jpg' %}');"
+    >
+
+        <div class="carousel-overlay"></div>
+
+        <div class="container text-center text-white">
+
+            <h1 class="display-4 fw-bold">
+                Set The Mood
+            </h1>
+
+            <p class="lead">
+                DJs and live music for every kind of celebration.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SLIDE 4 ================= -->
+
+    <div
+        class="carousel-slide"
+        data-slide="3"
+        style="background-image: url('{% static 'core/images/slide-catering.jpg' %}');"
+    >
+
+        <div class="carousel-overlay"></div>
+
+        <div class="container text-center text-white">
+
+            <h1 class="display-4 fw-bold">
+                Feasts Worth Celebrating
+            </h1>
+
+            <p class="lead">
+                Catering that keeps every guest talking.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Previous Arrow -->
+    <button
+        type="button"
+        id="prevSlide"
+        class="carousel-arrow carousel-arrow-left"
+        aria-label="Previous slide"
+    >
+        <span>‹</span>
+    </button>
+
+    <!-- Next Arrow -->
+    <button
+        type="button"
+        id="nextSlide"
+        class="carousel-arrow carousel-arrow-right"
+        aria-label="Next slide"
+    >
+        <span>›</span>
+    </button>
+
+
+    <!-- =================================================
+         DOTS
+         ================================================= -->
+
+    <div class="carousel-dots">
+
+        <span
+            class="dot active"
+            data-slide-btn="0"
+        ></span>
+
+        <span
+            class="dot"
+            data-slide-btn="1"
+        ></span>
+
+        <span
+            class="dot"
+            data-slide-btn="2"
+        ></span>
+
+        <span
+            class="dot"
+            data-slide-btn="3"
+        ></span>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SEARCH SECTION
+     ===================================================== -->
+
+<section
+    class="py-5"
+    style="background-color: #fff;"
+>
+
+    <div class="container">
+
+        <h3 class="fw-bold text-center mb-1">
+            Find Your Perfect Vendor
+        </h3>
+
+        <p class="text-muted text-center mb-4">
+            Search by service, or pick a category to get started.
+        </p>
+
+
+        <form
+            action="{% url 'core:browse_services' %}"
+            method="GET"
+            class="hero-search-form mx-auto"
+        >
+
+            <div class="row g-2 justify-content-center">
+
+                <div class="col-md-5">
+
+                    <input
+                        type="text"
+                        name="q"
+                        class="form-control form-control-lg"
+                        placeholder="What service are you looking for?"
+                    >
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <select
+                        name="category"
+                        class="form-select form-select-lg"
+                    >
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        {% for category in categories %}
+
+                            <option value="{{ category.slug }}">
+                                {{ category.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-eventora-primary btn-lg w-100"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CATEGORY SHOWCASE
+     ===================================================== -->
+
+<section class="container py-5">
+
+    <h2 class="fw-bold text-center mb-2">
+        Browse by Category
+    </h2>
+
+    <p class="text-muted text-center mb-4">
+        Find exactly the kind of professional you need for your event.
+    </p>
+
+
+    <div class="row g-4">
+
+        {% for category in categories %}
+
+            <div class="col-6 col-md-4 col-lg-2">
+
+                <a
+                    href="{% url 'core:browse_services' %}?category={{ category.slug }}"
+                    class="text-decoration-none"
+                >
+
+                    <div
+                        class="eventora-card p-4 text-center h-100"
+                    >
+
+                        <i
+                            class="bi {% if category.icon %}{{ category.icon }}{% else %}bi-stars{% endif %} fs-2 mb-2"
+                            style="color: var(--eventora-primary);"
+                        ></i>
+
+                        <p class="fw-semibold mb-0 text-dark">
+                            {{ category.name }}
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-muted text-center">
+                Categories will appear here once they're added.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURED VENDORS
+     ===================================================== -->
+
+<section
+    class="py-5"
+    style="background-color: #fff;"
+>
+
+    <div class="container">
+
+        <h2 class="fw-bold text-center mb-2">
+            Top-Rated Vendors
+        </h2>
+
+        <p class="text-muted text-center mb-4">
+            Trusted professionals loved by Eventora customers.
+        </p>
+
+
+        <div class="row g-4">
+
+            {% for vendor in featured_vendors %}
+
+                <div class="col-md-3 col-sm-6">
+
+                    <div
+                        class="eventora-card h-100 p-4 text-center"
+                    >
+
+                        <h5 class="fw-bold mb-1">
+                            {{ vendor.business_name }}
+                        </h5>
+
+                        <p class="text-muted small mb-2">
+                            {{ vendor.service_category.name }}
+                            —
+                            {{ vendor.city }}
+                        </p>
+
+
+                        {% if vendor.average_rating %}
+
+                            <p
+                                class="fw-bold mb-3"
+                                style="color: var(--eventora-accent);"
+                            >
+                                ★ {{ vendor.average_rating }}
+
+                                <span class="text-muted fw-normal small">
+                                    ({{ vendor.review_count }})
+                                </span>
+
+                            </p>
+
+                        {% else %}
+
+                            <p class="text-muted small mb-3">
+                                New vendor
+                            </p>
+
+                        {% endif %}
+
+
+                        <a
+                            href="{% url 'core:vendor_public_profile' vendor.id %}"
+                            class="btn btn-outline-primary btn-sm"
+                        >
+                            View Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-muted text-center">
+
+                    No approved vendors yet — check back soon, or
+
+                    <a href="{% url 'core:vendor_signup' %}">
+                        become the first to join!
+                    </a>
+
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TESTIMONIALS
+     ===================================================== -->
+
+{% if testimonials %}
+
+<section class="py-5">
+
+    <div class="container">
+
+        <h2 class="fw-bold text-center mb-2">
+            What Our Customers Say
+        </h2>
+
+        <p class="text-muted text-center mb-4">
+            Real feedback from real bookings.
+        </p>
+
+
+        <div class="row g-4">
+
+            {% for review in testimonials %}
+
+                <div class="col-md-4">
+
+                    <div class="eventora-card h-100 p-4">
+
+                        <p
+                            class="mb-3"
+                            style="color: var(--eventora-accent);"
+                        >
+
+                            {% for i in "12345" %}
+
+                                {% if forloop.counter <= review.rating %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </p>
+
+
+                        <p class="fst-italic mb-3">
+                            "{{ review.comment }}"
+                        </p>
+
+
+                        <p class="fw-semibold mb-0">
+                            {{ review.customer.username }}
+                        </p>
+
+                        <p class="text-muted small mb-0">
+                            on {{ review.vendor.business_name }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- =====================================================
+     CALL TO ACTION
+     ===================================================== -->
+
+<section
+    class="py-5"
+    style="background: linear-gradient(135deg, var(--eventora-primary), var(--eventora-secondary));"
+>
+
+    <div class="container">
+
+        <div class="row g-4 text-center text-white">
+
+            <div class="col-md-6">
+
+                <h3 class="fw-bold mb-2">
+                    Planning an Event?
+                </h3>
+
+                <p class="mb-4">
+                    Browse hundreds of trusted vendors and book with confidence.
+                </p>
+
+                <a
+                    href="{% url 'core:browse_services' %}"
+                    class="btn btn-light btn-lg"
+                >
+                    Browse Services
+                </a>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <h3 class="fw-bold mb-2">
+                    Offer Event Services?
+                </h3>
+
+                <p class="mb-4">
+                    Join Eventora and start getting bookings from customers near you.
+                </p>
+
+                <a
+                    href="{% url 'core:vendor_signup' %}"
+                    class="btn btn-eventora-accent btn-lg"
+                >
+                    Join as a Vendor
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CAROUSEL JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const carousel = document.getElementById("heroCarousel");
+
+    if (!carousel) {
+        return;
+    }
+
+    const slides = carousel.querySelectorAll(".carousel-slide");
+    const dots = carousel.querySelectorAll(".dot");
+
+    const previousButton = document.getElementById("prevSlide");
+    const nextButton = document.getElementById("nextSlide");
+
+    if (
+        slides.length === 0 ||
+        !previousButton ||
+        !nextButton
+    ) {
+        console.log("Carousel elements not found.");
+        return;
+    }
+
+    let currentSlide = 0;
+    let autoSlide;
+
+
+    /* ==============================
+       SHOW SLIDE
+       ============================== */
+
+    function showSlide(index) {
+
+        // Loop back to the first slide
+        if (index >= slides.length) {
+            index = 0;
+        }
+
+        // Loop to the last slide
+        if (index < 0) {
+            index = slides.length - 1;
+        }
+
+        // Remove active from all slides and dots
+        slides.forEach(function (slide) {
+            slide.classList.remove("active");
+        });
+
+        dots.forEach(function (dot) {
+            dot.classList.remove("active");
+        });
+
+        // Activate the current slide and dot
+        slides[index].classList.add("active");
+
+        if (dots[index]) {
+            dots[index].classList.add("active");
+        }
+
+        currentSlide = index;
+    }
+
+
+    /* ==============================
+       AUTO SLIDE
+       ============================== */
+
+    function startAutoSlide() {
+
+        autoSlide = setInterval(function () {
+            showSlide(currentSlide + 1);
+        }, 5000);
+
+    }
+
+    function restartAutoSlide() {
+
+        clearInterval(autoSlide);
+
+        startAutoSlide();
+
+    }
+
+
+    /* ==============================
+       ARROW BUTTONS
+       ============================== */
+
+    nextButton.addEventListener("click", function () {
+        showSlide(currentSlide + 1);
+        restartAutoSlide();
+    });
+
+    previousButton.addEventListener("click", function () {
+        showSlide(currentSlide - 1);
+        restartAutoSlide();
+    });
+
+
+    /* ==============================
+       DOTS
+       ============================== */
+
+    dots.forEach(function (dot, index) {
+
+        dot.addEventListener("click", function () {
+            showSlide(index);
+            restartAutoSlide();
+        });
+
+    });
+
+
+    /* ==============================
+       START
+       ============================== */
+
+    showSlide(0);
+
+    startAutoSlide();
+
+});
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% block title %}Login — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 480px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-4 text-center">Welcome Back</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Username</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-eventora-primary w-100 mt-2">Login</button>
+        </form>
+      
+    
+           <p>
+             <div style="text-align: center; margin-top: 10px;">
+             <a href="{% url 'core:forgot' %}">Forgot Password</a>
+            </div>
+        </p>
+
+        <p class="text-center mt-4 mb-0">
+            Don't have an account?
+            <a href="{% url 'core:customer_signup' %}">Sign up as Customer</a>
+            or
+            <a href="{% url 'core:vendor_signup' %}">Sign up as Vendor</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

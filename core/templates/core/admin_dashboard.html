@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+{% block title %}Admin Dashboard — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+    <p class="text-muted mb-4">Welcome, {{ user.username }}. Here's your platform overview.</p>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3 col-sm-6">
+            <a href="{% url 'core:user_directory' %}?role=customer" class="text-decoration-none">
+                <div class="eventora-card p-4 text-center stat-card-link">
+                    <p class="text-muted small mb-1">Customers</p>
+                    <h3 class="fw-bold mb-0 text-dark">{{ total_customers }}</h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a href="{% url 'core:vendor_directory' %}" class="text-decoration-none">
+                <div class="eventora-card p-4 text-center stat-card-link">
+                    <p class="text-muted small mb-1">Vendors</p>
+                    <h3 class="fw-bold mb-0 text-dark">{{ total_vendors }}</h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <a href="{% url 'core:browse_services' %}" class="text-decoration-none">
+                <div class="eventora-card p-4 text-center stat-card-link">
+                    <p class="text-muted small mb-1">Active Listings</p>
+                    <h3 class="fw-bold mb-0 text-dark">{{ active_listings }} <span class="fs-6 text-muted fw-normal">/ {{ total_listings }}</span></h3>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="eventora-card p-4 text-center">
+                <p class="text-muted small mb-1">Total Reviews</p>
+                <h3 class="fw-bold mb-0">{{ total_reviews }}</h3>
+            </div>
+        </div>
+    </div>
+
+    {% if pending_vendors_count > 0 %}
+        <div class="eventora-card p-4 mb-4" style="border-left: 4px solid var(--eventora-accent);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h5 class="fw-bold mb-1">NEW: {{ pending_vendors_count }} vendor(s) waiting for approval</h5>
+                    <p class="text-muted mb-0">Review new vendor applications before their listings go live.</p>
+                </div>
+                <a href="{% url 'core:vendor_approval_queue' %}" class="btn btn-eventora-accent mt-2 mt-md-0">Review Now</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="eventora-card p-4">
+                <h5 class="fw-bold mb-3">Booking Overview</h5>
+                <a href="{% url 'core:all_bookings_overview' %}" class="d-block text-decoration-none text-dark mb-1 booking-stat-row">
+                    Total Bookings: <strong>{{ total_bookings }}</strong>
+                </a>
+                <a href="{% url 'core:all_bookings_overview' %}?status=pending" class="d-block text-decoration-none text-dark mb-1 booking-stat-row">
+                    Pending: <strong>{{ pending_bookings }}</strong>
+                </a>
+                <a href="{% url 'core:all_bookings_overview' %}?status=confirmed" class="d-block text-decoration-none text-dark mb-1 booking-stat-row">
+                    Confirmed: <strong>{{ confirmed_bookings }}</strong>
+                </a>
+                <a href="{% url 'core:all_bookings_overview' %}?status=completed" class="d-block text-decoration-none text-dark mb-1 booking-stat-row">
+                    Completed: <strong>{{ completed_bookings }}</strong>
+                </a>
+                <a href="{% url 'core:all_bookings_overview' %}" class="btn btn-outline-primary btn-sm mt-3">View All Bookings</a>
+            </div>
+        </div>
+<div class="col-md-6">
+            <div class="eventora-card p-4">
+                <h5 class="fw-bold mb-3">Platform Revenue</h5>
+                <h2 class="fw-bold mb-0" style="color: var(--eventora-primary);">₹{{ platform_revenue }}</h2>
+                <p class="text-muted small mt-2 mb-0">
+                    Eventora's {{ platform_fee_percent }}% commission on completed bookings.
+                    Total transaction value: ₹{{ total_booking_value }}.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'core:vendor_directory' %}" class="btn btn-outline-secondary me-2">View All Vendors</a>
+        <a href="{% url 'core:user_directory' %}" class="btn btn-outline-secondary me-2">View All Users</a>
+        <a href="/admin/" class="btn btn-outline-secondary">Django Admin (Advanced)</a>
+    </div>
+</div>
+{% endblock %}

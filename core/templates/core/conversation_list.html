@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% block title %}My Messages — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">My Messages</h2>
+
+    {% if conversations %}
+        <div class="row g-4">
+            {% for conversation in conversations %}
+                <div class="col-md-6">
+                    <a href="{% url 'core:conversation_detail' conversation.id %}" class="text-decoration-none">
+                        <div class="eventora-card p-4 h-100">
+                            <div class="d-flex align-items-center mb-3">
+                                {% if conversation.vendor.user.profile_picture %}
+                                    <img src="{{ conversation.vendor.user.profile_picture.url }}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                        <span class="text-white fw-bold">{{ conversation.vendor.business_name|slice:":1" }}</span>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h5 class="fw-bold mb-0 text-dark">{{ conversation.vendor.business_name }}</h5>
+                                    <small class="text-muted">{{ conversation.vendor.service_category.name }}</small>
+                                </div>
+                            </div>
+                            {% if conversation.last_message %}
+                                <p class="mb-2 text-muted small">
+                                    <strong>{{ conversation.last_message.sender.username }}:</strong>
+                                    {{ conversation.last_message.content|truncatewords:10 }}
+                                </p>
+                                <small class="text-muted">{{ conversation.last_message.created_at|timesince }} ago</small>
+                            {% else %}
+                                <p class="mb-2 text-muted small">No messages yet</p>
+                            {% endif %}
+                            {% if conversation.unread_count_customer > 0 %}
+                                <span class="badge bg-danger">{{ conversation.unread_count_customer }} unread</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="eventora-card p-5 text-center">
+            <h4 class="fw-bold mb-3">No messages yet</h4>
+            <p class="text-muted mb-4">Start a conversation with vendors you're interested in!</p>
+            <a href="{% url 'core:browse_services' %}" class="btn btn-eventora-primary">Browse Vendors</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

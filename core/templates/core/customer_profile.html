@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% block title %}My Profile — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-4">My Profile</h2>
+
+        {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <small class="text-danger d-block">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-eventora-primary w-100 mt-2">Save Changes</button>
+        </form>
+
+        <hr class="my-4">
+        <a href="{% url 'password_change' %}" class="btn btn-outline-secondary w-100">Change Password</a>
+    </div>
+</div>
+{% endblock %}

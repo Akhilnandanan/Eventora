@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+{% block title %}My Bookings — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">My Bookings</h2>
+
+    <div class="row g-4">
+        {% for booking in bookings %}
+            <div class="col-md-6">
+                <div class="eventora-card p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="fw-bold mb-1">{{ booking.listing.title }}</h5>
+
+                        {% if booking.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif booking.status == 'confirmed' %}
+                            <span class="badge bg-success">Confirmed</span>
+                        {% elif booking.status == 'rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% elif booking.status == 'completed' %}
+                            <span class="badge bg-primary">Completed</span>
+                        {% elif booking.status == 'cancelled' %}
+                            <span class="badge bg-secondary">Cancelled</span>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-muted small mb-1">by {{ booking.vendor.business_name }}</p>
+                    <p class="mb-1"><strong>Event Date:</strong> {{ booking.event_date }}</p>
+
+                    {% if booking.venue_name or booking.event_city %}
+                        <p class="small text-muted mb-1">
+                            <strong>Venue:</strong>
+                            {% if booking.venue_name %}{{ booking.venue_name }}{% endif %}{% if booking.venue_name and booking.event_city %}, {% endif %}{% if booking.event_city %}{{ booking.event_city }}{% endif %}
+                        </p>
+                    {% endif %}
+
+                    {% if booking.selected_extras.all %}
+                        <p class="small text-muted mb-1">
+                            <strong>Extras:</strong>
+                            {% for e in booking.selected_extras.all %}{{ e.title_snapshot }} (+₹{{ e.price_snapshot }}){% if not forloop.last %}, {% endif %}{% endfor %}
+                        </p>
+                    {% endif %}
+                    <p class="fw-bold mb-1">Total: ₹{{ booking.total_price }}</p>
+
+                    {% if booking.customer_notes %}
+                        <p class="small text-muted mb-1"><strong>Your notes:</strong> {{ booking.customer_notes }}</p>
+                    {% endif %}
+
+                    {% if booking.vendor_response_note %}
+                        <p class="small text-muted mb-1"><strong>Vendor response:</strong> {{ booking.vendor_response_note }}</p>
+                    {% endif %}
+
+              {% if booking.status == 'confirmed' and not booking.is_paid %}
+                        <a href="{% url 'core:booking_payment' booking.id %}" class="btn btn-eventora-accent btn-sm mt-2 me-2">Pay Now</a>
+                    {% endif %}
+
+                    {% if booking.is_paid %}
+                        <span class="badge bg-success mt-2">Paid — {{ booking.payment_reference }}</span>
+                    {% endif %}
+
+                    {% if booking.status == 'pending' or booking.status == 'confirmed' %}
+                        <a href="{% url 'core:cancel_booking' booking.id %}"
+                           class="btn btn-outline-danger btn-sm mt-2"
+                           onclick="return confirm('Cancel this booking?');">Cancel Booking</a>
+                    {% endif %}
+
+                    {% if booking.status == 'completed' %}
+                        {% if booking.review %}
+                            <span class="badge bg-light text-dark border mt-2">You rated this {{ booking.review.rating }}★</span>
+                        {% else %}
+                            <a href="{% url 'core:add_review' booking.id %}" class="btn btn-eventora-accent btn-sm mt-2">Leave a Review</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">You haven't made any bookings yet. <a href="{% url 'core:browse_services' %}">Browse services</a> to get started.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

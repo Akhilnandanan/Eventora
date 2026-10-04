@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% block title %}Vendor Dashboard — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="fw-bold mb-1">Vendor Dashboard</h2>
+            <p class="text-muted mb-0">Welcome back, {{ user.first_name|default:user.username }}! Here is your business overview.</p>
+        </div>
+        <a href="{% url 'core:vendor_public_profile' user.vendor_profile.id %}" class="btn btn-outline-primary">
+            <i class="bi bi-eye me-1"></i> View My Public Portfolio
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <a href="{% url 'core:my_services' %}" class="text-decoration-none">
+                <div class="eventora-card p-4 stat-card-link h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="fw-bold text-dark mb-0">Your Listings</h5>
+                        <i class="bi bi-collection-fill fs-2 text-primary"></i>
+                    </div>
+                    <p class="display-5 fw-bold mb-0" style="color: var(--eventora-primary);">{{ listings_count }}</p>
+                    <span class="btn btn-eventora-primary w-100 mt-4">Manage Services</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'core:booking_requests' %}" class="text-decoration-none">
+                <div class="eventora-card p-4 stat-card-link h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="fw-bold text-dark mb-0">Booking Requests</h5>
+                        <i class="bi bi-calendar-check-fill fs-2" style="color: var(--eventora-accent);"></i>
+                    </div>
+                    <p class="display-5 fw-bold mb-0" style="color: var(--eventora-accent);">{{ pending_bookings_count }}</p>
+                    <span class="btn btn-eventora-accent w-100 mt-4">View Requests</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'core:vendor_settings' %}" class="text-decoration-none">
+                <div class="eventora-card p-4 stat-card-link h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="fw-bold text-dark mb-0">Business Settings</h5>
+                        <i class="bi bi-gear-fill fs-2 text-secondary"></i>
+                    </div>
+                    <p class="text-muted small mb-0 mt-2">Update business details, contact info, and upload portfolio pictures.</p>
+                    <span class="btn btn-outline-secondary w-100 mt-4">Edit Settings & Portfolio</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

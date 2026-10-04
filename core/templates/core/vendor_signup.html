@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% block title %}Vendor Sign Up — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 520px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-2 text-center">Join Eventora as a Vendor</h2>
+        <p class="text-center text-muted mb-4">List your services and start getting bookings.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+{% for field in form %}
+                {% if field.name == 'other_category_name' %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        <small class="text-muted d-block">Leave the Category dropdown on its default option to use this instead.</small>
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="text-muted d-block">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-eventora-primary w-100 mt-2">Create Vendor Account</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Already have an account? <a href="{% url 'core:login' %}">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

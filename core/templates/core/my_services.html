@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% block title %}My Services — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">My Services</h2>
+        <a href="{% url 'core:add_service' %}" class="btn btn-eventora-primary">+ Add New Service</a>
+    </div>
+
+    <div class="row g-4">
+        {% for listing in listings %}
+            <div class="col-md-4">
+                <div class="eventora-card h-100 p-3">
+                    {% if listing.cover_image %}
+                        <img src="{{ listing.cover_image.url }}" class="w-100 rounded mb-3" style="height: 160px; object-fit: cover;">
+                    {% endif %}
+                    <h5 class="fw-bold">{{ listing.title }}</h5>
+                    <p class="text-muted small">{{ listing.category.name }} — ₹{{ listing.price }} / {{ listing.get_price_unit_display }}</p>
+
+                    {% if listing.is_active %}
+                        <span class="badge bg-success mb-2">Active</span>
+                    {% else %}
+                        <span class="badge bg-secondary mb-2">Inactive</span>
+                    {% endif %}
+
+                    <div class="d-flex gap-2 mt-2">
+                        <a href="{% url 'core:edit_service' listing.id %}" class="btn btn-outline-primary btn-sm w-100">Edit</a>
+                        <a href="{% url 'core:delete_service' listing.id %}"
+                           class="btn btn-outline-danger btn-sm w-100"
+                           onclick="return confirm('Delete this listing?');">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">You haven't created any service listings yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% block title %}Add Service — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-4">Add New Service Listing</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name == 'other_category_name' %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        <small class="text-muted d-block">Leave the Category dropdown on its default option to use this instead.</small>
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="text-muted d-block">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <button type="submit" class="btn btn-eventora-primary w-100 mt-2">Create Listing</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

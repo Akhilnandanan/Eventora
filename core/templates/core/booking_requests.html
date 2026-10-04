@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% block title %}Booking Requests — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">Booking Requests</h2>
+
+    <div class="row g-4">
+        {% for booking in bookings %}
+            <div class="col-md-6">
+                <div class="eventora-card p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="fw-bold mb-1">{{ booking.listing.title }}</h5>
+
+                        {% if booking.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif booking.status == 'confirmed' %}
+                            <span class="badge bg-success">Confirmed</span>
+                        {% elif booking.status == 'rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% elif booking.status == 'completed' %}
+                            <span class="badge bg-primary">Completed</span>
+                        {% elif booking.status == 'cancelled' %}
+                            <span class="badge bg-secondary">Cancelled</span>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-muted small mb-1">Customer: {{ booking.customer.username }}</p>
+                    <p class="mb-1"><strong>Event Date:</strong> {{ booking.event_date }}</p>
+
+                    {% if booking.venue_name or booking.event_city %}
+                        <p class="small text-muted mb-1">
+                            <strong>Venue:</strong>
+                            {% if booking.venue_name %}{{ booking.venue_name }}{% endif %}{% if booking.venue_name and booking.event_city %}, {% endif %}{% if booking.event_city %}{{ booking.event_city }}{% endif %}
+                        </p>
+                    {% endif %}
+                    {% if booking.venue_address %}
+                        <p class="small text-muted mb-1"><strong>Address:</strong> {{ booking.venue_address }}</p>
+                    {% endif %}
+
+                    {% if booking.selected_extras.all %}
+                        <p class="small text-muted mb-1">
+                            <strong>Extras:</strong>
+                            {% for e in booking.selected_extras.all %}{{ e.title_snapshot }} (+₹{{ e.price_snapshot }}){% if not forloop.last %}, {% endif %}{% endfor %}
+                        </p>
+                    {% endif %}
+                    <p class="fw-bold mb-1">Total: ₹{{ booking.total_price }}</p>
+
+                    {% if booking.customer_notes %}
+                        <p class="small text-muted mb-2"><strong>Customer notes:</strong> {{ booking.customer_notes }}</p>
+                    {% endif %}
+
+                    {% if booking.status == 'pending' %}
+                        <div class="d-flex gap-2 mt-2">
+                            <a href="{% url 'core:respond_booking' booking.id 'accept' %}" class="btn btn-success btn-sm w-100">Accept</a>
+                            <a href="{% url 'core:respond_booking' booking.id 'reject' %}" class="btn btn-outline-danger btn-sm w-100">Reject</a>
+                        </div>
+                    {% elif booking.status == 'confirmed' %}
+                        <a href="{% url 'core:mark_booking_completed' booking.id %}"
+                           class="btn btn-eventora-primary btn-sm mt-2"
+                           onclick="return confirm('Mark this booking as completed?');">Mark as Completed</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">No booking requests yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% block title %}All Bookings — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">All Bookings ({{ bookings|length }})</h2>
+
+    <!-- Status filter pills -->
+    <div class="mb-4">
+        <a href="{% url 'core:all_bookings_overview' %}"
+           class="btn btn-sm {% if not status_filter %}btn-eventora-primary{% else %}btn-outline-secondary{% endif %} me-2 mb-2">
+            All
+        </a>
+        {% for value, label in status_choices %}
+            <a href="?status={{ value }}"
+               class="btn btn-sm {% if status_filter == value %}btn-eventora-primary{% else %}btn-outline-secondary{% endif %} me-2 mb-2">
+                {{ label }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle eventora-card p-3">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Service</th>
+                    <th>Vendor</th>
+                    <th>Event Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.customer.username }}</td>
+                        <td>{{ booking.listing.title }}</td>
+                        <td>{{ booking.vendor.business_name }}</td>
+                        <td>{{ booking.event_date }}</td>
+                        <td>
+                            {% if booking.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif booking.status == 'confirmed' %}
+                                <span class="badge bg-success">Confirmed</span>
+                            {% elif booking.status == 'rejected' %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% elif booking.status == 'completed' %}
+                                <span class="badge bg-primary">Completed</span>
+                            {% elif booking.status == 'cancelled' %}
+                                <span class="badge bg-secondary">Cancelled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5" class="text-muted">No bookings found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

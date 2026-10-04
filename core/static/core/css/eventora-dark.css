@@ -1,0 +1,233 @@
+/* =========================================================
+   EVENTORA DARK THEME  (after-dark venue: plum ink + champagne)
+   Load AFTER your existing CSS. Same class + variable names,
+   only the look changes.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;700&display=swap');
+
+:root {
+    /* your existing variable names, new values */
+    --eventora-primary:   #8f7dff;   /* orchid violet */
+    --eventora-secondary: #c9557f;   /* dusk rose (used in CTA gradient) */
+    --eventora-accent:    #f0c27b;   /* champagne */
+
+    /* new helpers (only used in this file) */
+    --eventora-bg:        #15111f;
+    --eventora-surface:   #1e1830;
+    --eventora-surface-2: #282040;
+    --eventora-border:    rgba(255, 255, 255, .09);
+    --eventora-text:      #ece8f5;
+    --eventora-muted:     #a69fbb;
+
+    --ev-ease: cubic-bezier(.22, .61, .36, 1);
+
+    /* make Bootstrap 5 read the same palette */
+    --bs-body-bg: var(--eventora-bg);
+    --bs-body-color: var(--eventora-text);
+    --bs-border-color: var(--eventora-border);
+    --bs-link-color: var(--eventora-accent);
+    --bs-link-hover-color: #ffdca3;
+    color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--eventora-bg);
+    color: var(--eventora-text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .display-4 {
+    font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
+    letter-spacing: -.01em;
+    color: var(--eventora-text);
+}
+
+a { transition: color .25s var(--ev-ease); }
+
+/* Bootstrap helper classes that assume a light page */
+.text-muted { color: var(--eventora-muted) !important; }
+.text-dark  { color: var(--eventora-text) !important; }
+.bg-white, .bg-light { background: var(--eventora-surface) !important; }
+
+/* sections that use inline style="background-color: #fff;" */
+section[style*="background-color: #fff"],
+section[style*="background-color:#fff"] {
+    background-color: var(--eventora-surface) !important;
+}
+
+/* ---------- navbar / footer (works with common Bootstrap markup) ---------- */
+.navbar, .eventora-navbar, .navbar.bg-white, .navbar.bg-dark, .navbar.bg-primary {
+    background: rgba(21, 17, 31, .82) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--eventora-border);
+}
+.navbar .nav-link, .navbar-brand { color: var(--eventora-text) !important; }
+.navbar .nav-link { position: relative; transition: color .25s var(--ev-ease); }
+.navbar .nav-link:hover { color: var(--eventora-accent) !important; }
+.navbar-toggler { border-color: var(--eventora-border); filter: invert(1); }
+
+footer, .footer, .eventora-footer {
+    background: #100c19 !important;
+    color: var(--eventora-muted);
+    border-top: 1px solid var(--eventora-border);
+}
+
+/* ---------- cards ---------- */
+.eventora-card {
+    background: var(--eventora-surface);
+    border: 1px solid var(--eventora-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .28);
+    color: var(--eventora-text);
+    transition: transform .35s var(--ev-ease),
+                border-color .35s var(--ev-ease),
+                box-shadow .35s var(--ev-ease);
+}
+a:hover > .eventora-card,
+.eventora-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240, 194, 123, .45);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .4), 0 0 0 1px rgba(240, 194, 123, .12);
+}
+.stat-card-link h3 { color: var(--eventora-accent) !important; }
+.booking-stat-row {
+    padding: .35rem .5rem;
+    border-radius: 8px;
+    transition: background .25s var(--ev-ease), padding-left .25s var(--ev-ease);
+}
+.booking-stat-row:hover { background: var(--eventora-surface-2); padding-left: .9rem; }
+
+/* ---------- buttons ---------- */
+.btn { transition: transform .2s var(--ev-ease), box-shadow .3s var(--ev-ease),
+                   background-color .3s var(--ev-ease), color .3s var(--ev-ease),
+                   border-color .3s var(--ev-ease); }
+.btn:active { transform: scale(.97); }
+
+.btn-eventora-primary {
+    background: linear-gradient(135deg, var(--eventora-primary), #6d5bf0);
+    border: 0;
+    color: #fff;
+    border-radius: 10px;
+}
+.btn-eventora-primary:hover {
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(143, 125, 255, .4);
+    transform: translateY(-2px);
+}
+
+.btn-eventora-accent {
+    background: var(--eventora-accent);
+    border: 0;
+    color: #2a1f0a;
+    font-weight: 700;
+    border-radius: 10px;
+}
+.btn-eventora-accent:hover {
+    background: #ffd493;
+    color: #2a1f0a;
+    box-shadow: 0 8px 24px rgba(240, 194, 123, .35);
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary { color: var(--eventora-primary); border-color: var(--eventora-primary); border-radius: 10px; }
+.btn-outline-primary:hover { background: var(--eventora-primary); border-color: var(--eventora-primary); color: #fff; }
+.btn-outline-secondary { color: var(--eventora-text); border-color: var(--eventora-border); border-radius: 10px; }
+.btn-outline-secondary:hover { background: var(--eventora-surface-2); color: var(--eventora-accent); border-color: var(--eventora-accent); }
+.btn-light { border-radius: 10px; }
+
+/* ---------- forms ---------- */
+.form-control, .form-select, textarea {
+    background-color: var(--eventora-surface-2);
+    border: 1px solid var(--eventora-border);
+    color: var(--eventora-text);
+    border-radius: 10px;
+    transition: border-color .25s var(--ev-ease), box-shadow .25s var(--ev-ease);
+}
+.form-control::placeholder { color: var(--eventora-muted); }
+.form-control:focus, .form-select:focus, textarea:focus {
+    background-color: var(--eventora-surface-2);
+    color: var(--eventora-text);
+    border-color: var(--eventora-primary);
+    box-shadow: 0 0 0 .2rem rgba(143, 125, 255, .25);
+}
+.form-label { color: var(--eventora-text); }
+.form-check-input { background-color: var(--eventora-surface-2); border-color: var(--eventora-border); }
+.form-check-input:checked { background-color: var(--eventora-primary); border-color: var(--eventora-primary); }
+
+/* ---------- tables, lists, alerts, dropdowns, modals ---------- */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--eventora-text);
+    --bs-table-border-color: var(--eventora-border);
+    --bs-table-striped-bg: rgba(255, 255, 255, .03);
+    --bs-table-hover-bg: rgba(255, 255, 255, .05);
+}
+.list-group-item { background: var(--eventora-surface); color: var(--eventora-text); border-color: var(--eventora-border); }
+.dropdown-menu, .modal-content { background: var(--eventora-surface); color: var(--eventora-text); border: 1px solid var(--eventora-border); border-radius: 14px; }
+.dropdown-item { color: var(--eventora-text); }
+.dropdown-item:hover { background: var(--eventora-surface-2); color: var(--eventora-accent); }
+.alert { border: 1px solid var(--eventora-border); border-radius: 12px; background: var(--eventora-surface-2); color: var(--eventora-text); }
+.alert-success { border-left: 4px solid #5fd6a0; }
+.alert-danger, .alert-error { border-left: 4px solid #ff7a8a; }
+.btn-close { filter: invert(1) grayscale(1) brightness(1.6); }
+.dropdown-divider { border-color: var(--eventora-border); }
+.alert-warning { border-left: 4px solid var(--eventora-accent); }
+.alert-info    { border-left: 4px solid var(--eventora-primary); }
+.badge { border-radius: 8px; }
+hr { border-color: var(--eventora-border); opacity: 1; }
+
+/* ---------- hero carousel ---------- */
+.carousel-overlay {
+    background: linear-gradient(180deg, rgba(21, 17, 31, .55) 0%, rgba(21, 17, 31, .82) 100%) !important;
+}
+.carousel-slide { transition: opacity 1s var(--ev-ease); }
+
+/* the one orchestrated moment: hero text rises in on every slide change */
+.carousel-slide.active .container > * {
+    animation: evRise .9s var(--ev-ease) both;
+}
+.carousel-slide.active .container > *:nth-child(2) { animation-delay: .15s; }
+
+@keyframes evRise {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.carousel-arrow {
+    background: rgba(30, 24, 48, .6) !important;
+    border: 1px solid var(--eventora-border) !important;
+    color: var(--eventora-text) !important;
+    backdrop-filter: blur(6px);
+    transition: background .3s var(--ev-ease), color .3s var(--ev-ease), transform .3s var(--ev-ease);
+}
+.carousel-arrow:hover { background: var(--eventora-accent) !important; color: #2a1f0a !important; }
+
+.dot { background: rgba(255, 255, 255, .35) !important; transition: width .4s var(--ev-ease), background .3s var(--ev-ease); }
+.dot.active { background: var(--eventora-accent) !important; width: 26px; border-radius: 999px; }
+
+.hero-search-form .form-control,
+.hero-search-form .form-select { background-color: var(--eventora-surface-2); }
+
+/* ---------- scrollbar + selection ---------- */
+::selection { background: rgba(143, 125, 255, .45); color: #fff; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--eventora-bg); }
+::-webkit-scrollbar-thumb { background: var(--eventora-surface-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--eventora-primary); }
+
+/* ---------- keyboard focus + reduced motion ---------- */
+:focus-visible { outline: 2px solid var(--eventora-accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: .01ms !important;
+    }
+}

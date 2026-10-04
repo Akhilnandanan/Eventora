@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% block title %}Edit Service — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-4">Edit: {{ listing.title }}</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+{% for field in form %}
+                {% if field.name == 'other_category_name' %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        <small class="text-muted d-block">Leave the Category dropdown on its default option to use this instead.</small>
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="text-muted d-block">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+
+
+<hr class="my-4">
+            <h5 class="fw-bold mb-2">Gallery Photos</h5>
+            <p class="text-muted small mb-3">Add extra photos of your work for this service (shown on the listing's detail page).</p>
+
+            {{ image_formset.management_form }}
+            {% for img_form in image_formset %}
+                <div class="row g-2 align-items-center mb-3">
+                    {{ img_form.id }}
+                    <div class="col-md-5">
+                        {% if img_form.instance.image %}
+                            <img src="{{ img_form.instance.image.url }}" style="height: 60px; width: 60px; object-fit: cover; border-radius: 6px;" class="mb-1">
+                        {% endif %}
+                        {{ img_form.image }}
+                    </div>
+                    <div class="col-md-5">
+                        {{ img_form.caption }}
+                    </div>
+                    <div class="col-md-2">
+                        {% if img_form.instance.pk %}
+                            <div class="form-check mt-2">
+                                {{ img_form.DELETE }}
+                                <label class="form-check-label small text-danger">Remove</label>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+<hr class="my-4">
+            <h5 class="fw-bold mb-2">Optional Extras / Add-ons</h5>
+            <p class="text-muted small mb-3">Let customers add optional extras when booking this service. Leave a row blank to skip it.</p>
+
+            {{ extra_formset.management_form }}
+            {% for extra_form in extra_formset %}
+                <div class="row g-2 align-items-center mb-2">
+                    {{ extra_form.id }}
+                    <div class="col-md-5">
+                        {{ extra_form.title }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ extra_form.price }}
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check mt-2">
+                            {{ extra_form.is_active }}
+                            <label class="form-check-label small">Active</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        {% if extra_form.instance.pk %}
+                            <div class="form-check mt-2">
+                                {{ extra_form.DELETE }}
+                                <label class="form-check-label small text-danger">Remove</label>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-eventora-primary w-100 mt-2">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

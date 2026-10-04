@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+{% block title %}User Directory — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">All Users ({{ users|length }})</h2>
+
+    <div class="mb-4">
+        <a href="{% url 'core:user_directory' %}"
+           class="btn btn-sm {% if not role_filter %}btn-eventora-primary{% else %}btn-outline-secondary{% endif %} me-2 mb-2">
+            All
+        </a>
+        {% for value, label in role_choices %}
+            <a href="?role={{ value }}"
+               class="btn btn-sm {% if role_filter == value %}btn-eventora-primary{% else %}btn-outline-secondary{% endif %} me-2 mb-2">
+                {{ label }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle eventora-card p-3">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Phone</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                    <tr>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.first_name }} {{ u.last_name }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>
+                            {% if u.role == 'admin' %}
+                                <span class="badge bg-dark">Admin</span>
+                            {% elif u.role == 'vendor' %}
+                                <span class="badge bg-primary">Vendor</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Customer</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ u.phone_number|default:"-" }}</td>
+                        <td>{{ u.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            {% if u.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Deactivated</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.role != 'admin' and u != request.user %}
+ {% if u.is_active %}
+                                    <a href="{% url 'core:toggle_user_active' u.id %}{% if role_filter %}?role={{ role_filter }}{% endif %}"
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Deactivate {{ u.username }}? They will not be able to log in.');">
+                                        Deactivate
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'core:toggle_user_active' u.id %}{% if role_filter %}?role={{ role_filter }}{% endif %}"
+                                       class="btn btn-outline-success btn-sm"
+                                       onclick="return confirm('Reactivate {{ u.username }}?');">
+                                        Activate
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted small">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="8" class="text-muted">No users found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

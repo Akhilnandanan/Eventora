@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+{% block title %}Vendor Directory — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">All Vendors ({{ vendors|length }})</h2>
+
+    <div class="table-responsive">
+        <table class="table align-middle eventora-card p-3">
+            <thead>
+                <tr>
+                    <th>Business Name</th>
+                    <th>Category</th>
+                    <th>City</th>
+                    <th>Rating</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vendor in vendors %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'core:vendor_public_profile' vendor.id %}">{{ vendor.business_name }}</a>
+                        </td>
+                        <td>{{ vendor.service_category.name }}</td>
+                        <td>{{ vendor.city }}</td>
+                        <td>
+                            {% if vendor.average_rating %}
+                                ★ {{ vendor.average_rating }} ({{ vendor.review_count }})
+                            {% else %}
+                                <span class="text-muted">No reviews</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if vendor.is_approved %}
+                                <span class="badge bg-success">Approved</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if vendor.is_approved %}
+                                <a href="{% url 'core:unapprove_vendor' vendor.id %}"
+                                   class="btn btn-outline-danger btn-sm"
+                                   onclick="return confirm('Unapprove {{ vendor.business_name }}? Their listings will be hidden from public view.');">
+                                    Unapprove
+                                </a>
+                            {% else %}
+                                <a href="{% url 'core:approve_vendor' vendor.id %}"
+                                   class="btn btn-outline-success btn-sm"
+                                   onclick="return confirm('Approve {{ vendor.business_name }}?');">
+                                    Approve
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6" class="text-muted">No vendors yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

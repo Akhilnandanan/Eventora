@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% block title %}Request Booking — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-1">Book: {{ listing.title }}</h2>
+        <p class="text-muted mb-4">by {{ listing.vendor.business_name }} — ₹{{ listing.price }} / {{ listing.get_price_unit_display }}</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            {% if field.name == 'extras' %}
+                    {% if has_extras %}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold d-block mb-2">Optional Extras</label>
+                            <div class="extras-checkbox-list">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="text-muted d-block">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+<button type="submit" class="btn btn-eventora-primary w-100 mt-4">Send Booking Request</button>        </form>
+    </div>
+</div>
+{% endblock %}

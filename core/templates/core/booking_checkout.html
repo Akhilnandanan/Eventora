@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+{% block title %}Confirm Your Booking — Eventora{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <div class="eventora-card p-4">
+        <h2 class="fw-bold mb-1">Review Your Booking</h2>
+        <p class="text-muted mb-4">This is a review step — no payment is processed. Confirming just sends your request to the vendor.</p>
+
+        <div class="mb-4">
+            <h5 class="fw-bold mb-2">{{ listing.title }}</h5>
+            <p class="text-muted small mb-0">by {{ listing.vendor.business_name }}</p>
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+            <p class="mb-1"><strong>Event Date:</strong> {{ pending.event_date }}</p>
+
+            {% if pending.venue_name or pending.event_city %}
+                <p class="mb-1">
+                    <strong>Venue:</strong>
+                    {% if pending.venue_name %}{{ pending.venue_name }}{% endif %}{% if pending.venue_name and pending.event_city %}, {% endif %}{% if pending.event_city %}{{ pending.event_city }}{% endif %}
+                </p>
+            {% endif %}
+            {% if pending.venue_address %}
+                <p class="mb-1"><strong>Address:</strong> {{ pending.venue_address }}</p>
+            {% endif %}
+            {% if pending.customer_notes %}
+                <p class="mb-1"><strong>Notes:</strong> {{ pending.customer_notes }}</p>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+            <div class="d-flex justify-content-between">
+                <span>{{ listing.title }}</span>
+                <span>₹{{ listing.price }}</span>
+            </div>
+
+            {% for extra in selected_extras %}
+                <div class="d-flex justify-content-between text-muted small">
+                    <span>+ {{ extra.title }}</span>
+                    <span>₹{{ extra.price }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-between mb-4">
+            <strong class="fs-5">Total</strong>
+            <strong class="fs-5" style="color: var(--eventora-primary);">₹{{ total_price }}</strong>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-eventora-primary w-100">Confirm Booking</button>
+        </form>
+
+        <a href="{% url 'core:request_booking' listing.id %}" class="btn btn-outline-secondary w-100 mt-2">Back to Edit</a>
+    </div>
+</div>
+{% endblock %}
