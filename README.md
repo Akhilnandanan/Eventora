@@ -18,11 +18,13 @@ This project was built as a college project to demonstrate full-stack web develo
 ## Key Features
 
 ### Authentication & Roles
+
 - Custom User model with three roles: Customer, Vendor, Admin
 - Separate signup flows for Customers and Vendors
 - Role-based dashboards and custom permission decorators (not just `@login_required`)
 
 ### For Customers
+
 - Browse and search services by category, city, keyword, and price range
 - View vendor public profiles, including portfolio galleries and reviews
 - Book a service with optional add-ons (extras) and venue details
@@ -32,6 +34,7 @@ This project was built as a college project to demonstrate full-stack web develo
 - Leave a star rating + written review after a completed booking
 
 ### For Vendors
+
 - Manage multiple service listings, each with its own price, category, and optional add-ons
 - Upload a photo gallery per listing, plus a general portfolio gallery on their public profile
 - Declare a primary city plus additional cities served
@@ -40,6 +43,7 @@ This project was built as a college project to demonstrate full-stack web develo
 - Edit business details and account settings in one place
 
 ### For Admins
+
 - Custom-built admin dashboard (separate from Django Admin) with live platform stats
 - Vendor approval queue — approve, reject, or unapprove vendors
 - Full vendor and user directories with filtering
@@ -75,8 +79,8 @@ Eventora/
 1. Clone the repository and navigate into it:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   cd YOUR_REPO
+   git clone https://github.com/Akhilnandanan/Eventora.git
+   cd Eventora
    ```
 
 2. Create and activate a virtual environment:
